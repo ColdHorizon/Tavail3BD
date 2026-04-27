@@ -42,6 +42,7 @@
             label2.Size = new Size(106, 20);
             label2.TabIndex = 2;
             label2.Text = "Select a player";
+            label2.Click += label2_Click;
             // 
             // buttonNew
             // 
@@ -70,6 +71,7 @@
             buttonUsePly.TabIndex = 6;
             buttonUsePly.Text = "Use Player";
             buttonUsePly.UseVisualStyleBackColor = true;
+            buttonUsePly.Click += buttonUsePly_Click;
             // 
             // Form1
             // 
