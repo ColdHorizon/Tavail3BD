@@ -24,6 +24,8 @@ namespace Travail3BD
 
         Random rng = new Random();
 
+        DataTable abilityTable = new DataTable();
+
         public GameForm()
         {
             InitializeComponent();
@@ -39,6 +41,7 @@ namespace Travail3BD
         private void GameForm_Load(object sender, EventArgs e)
         {
             LoadPlayer();
+            LoadPlayerAbilities();
             LoadEnemy();
             UpdateUI();
         }
@@ -65,6 +68,29 @@ namespace Travail3BD
                 }
 
                 r.Close();
+            }
+        }
+
+        private void LoadPlayerAbilities()
+        {
+            string conn = @"Server=localhost;Database=FurryRPG;Trusted_Connection=True;TrustServerCertificate=True";
+
+            using (SqlConnection c = new SqlConnection(conn))
+            {
+                c.Open();
+
+                SqlDataAdapter da = new SqlDataAdapter(
+                    "SELECT abilities.abilityName, abilities.abilityPower, abilities.abilityType " +
+                    "FROM abilities " +
+                    "JOIN class_abilities ON abilities.abilityId = class_abilities.abilityId " +
+                    "JOIN players ON players.classId = class_abilities.classId " +
+                    "WHERE players.playerId = @id",
+                    c
+                );
+
+                da.SelectCommand.Parameters.AddWithValue("@id", playerId);
+
+                da.Fill(abilityTable);
             }
         }
 
@@ -103,9 +129,24 @@ namespace Travail3BD
             labelEnemyName.Text = enemyName;
             labelEnemyHP.Text = "HP Ennemi : " + enemyHp;
             labelScore.Text = "Score : " + score;
+
+            if (abilityTable.Rows.Count > 0)
+                buttonAtk1.Text = abilityTable.Rows[0]["abilityName"].ToString();
+            else
+                buttonAtk1.Text = "-";
+
+            if (abilityTable.Rows.Count > 1)
+                buttonAtk2.Text = abilityTable.Rows[1]["abilityName"].ToString();
+            else
+                buttonAtk2.Text = "-";
+
+            if (abilityTable.Rows.Count > 2)
+                buttonAtk3.Text = abilityTable.Rows[2]["abilityName"].ToString();
+            else
+                buttonAtk3.Text = "-";
         }
 
-        private void PlayerAttack(int power, int cost)
+        private void PlayerAttack(int power, int cost, string abilityName, string abilityType)
         {
             if (playerEnergy < cost)
             {
@@ -115,12 +156,21 @@ namespace Travail3BD
 
             playerEnergy -= cost;
 
+            if (abilityType.StartsWith("chance-hit"))
+            {
+                int roll = rng.Next(100);
+                if (roll < 10)
+                    power *= 3;
+                else if (roll < 25)
+                    power *= 2;
+            }
+
             int dmg = power + playerAtk - enemyDef;
             if (dmg < 0) dmg = 0;
 
             enemyHp -= dmg;
 
-            textBoxLog.AppendText("Tu attaques et infliges " + dmg + " dégâts.\r\n");
+            textBoxLog.AppendText("Tu utilises " + abilityName + " et infliges " + dmg + " dégâts.\r\n");
 
             if (enemyHp <= 0)
             {
@@ -171,17 +221,35 @@ namespace Travail3BD
 
         private void button1_Click(object sender, EventArgs e)
         {
-            PlayerAttack(10, 0);
+            if (abilityTable.Rows.Count > 0)
+            {
+                string name = abilityTable.Rows[0]["abilityName"].ToString();
+                int power = (int)abilityTable.Rows[0]["abilityPower"];
+                string type = abilityTable.Rows[0]["abilityType"].ToString();
+                PlayerAttack(power, 0, name, type);
+            }
         }
 
         private void button2_Click(object sender, EventArgs e)
         {
-            PlayerAttack(20, 1);
+            if (abilityTable.Rows.Count > 1)
+            {
+                string name = abilityTable.Rows[1]["abilityName"].ToString();
+                int power = (int)abilityTable.Rows[1]["abilityPower"];
+                string type = abilityTable.Rows[1]["abilityType"].ToString();
+                PlayerAttack(power, 1, name, type);
+            }
         }
 
         private void button3_Click(object sender, EventArgs e)
         {
-            PlayerAttack(5, 0);
+            if (abilityTable.Rows.Count > 2)
+            {
+                string name = abilityTable.Rows[2]["abilityName"].ToString();
+                int power = (int)abilityTable.Rows[2]["abilityPower"];
+                string type = abilityTable.Rows[2]["abilityType"].ToString();
+                PlayerAttack(power, 0, name, type);
+            }
         }
     }
 }
