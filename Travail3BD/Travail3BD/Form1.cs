@@ -16,12 +16,27 @@ namespace Travail3BD
             DataTable dt = new DataTable();
             using (SqlConnection connexion = new SqlConnection(chaine_connexion))
             {
+                
                 connexion.Open();
-                SqlDataAdapter adapter_programmes = new SqlDataAdapter("Select * FROM classes", connexion);
+                SqlDataAdapter adapter_programmes = new SqlDataAdapter("Select * FROM players", connexion);
                 adapter_programmes.Fill(dt);
-                dataGridView1.DataSource = dt.DefaultView;
+
+                comboBoxPly.DataSource = dt;
+                comboBoxPly.DisplayMember = "playerName";
+
 
             }
+        }
+
+        private void buttonNew_Click(object sender, EventArgs e)
+        {
+            CreatePlayer player = new CreatePlayer();
+            player.ShowDialog();
+        }
+
+        private void comboBoxPly_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            
         }
     }
 }
