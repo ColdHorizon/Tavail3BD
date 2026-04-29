@@ -1,5 +1,6 @@
 ﻿using Microsoft.Data.SqlClient;
 using System;
+using System.Collections;
 using System.Data;
 using System.Windows.Forms;
 
@@ -26,16 +27,15 @@ namespace Travail3BD
 
         DataTable abilityTable = new DataTable();
 
-        public GameForm()
-        {
-            InitializeComponent();
-        }
+
 
         public GameForm(int id)
         {
             InitializeComponent();
             playerId = id;
             this.Load += GameForm_Load;
+            textBoxUpgrades.Enabled = false;
+            buttonUpg.Enabled = false;
         }
 
         private void GameForm_Load(object sender, EventArgs e)
@@ -175,13 +175,54 @@ namespace Travail3BD
             if (enemyHp <= 0)
             {
                 EnemyDefeated();
+                Upgrade();
                 return;
             }
 
             EnemyTurn();
             UpdateUI();
         }
+        private void Upgrade()
+        {
+            
 
+            string conn = @"Server=localhost;Database=FurryRPG;Trusted_Connection=True;TrustServerCertificate=True";
+            string info = "select upgradeName,upgradeValue,upgradetype from upgrades where upgradeid = @id";
+
+
+
+            using (SqlConnection c = new SqlConnection(conn))
+            {
+                c.Open();
+                SqlDataAdapter da = new SqlDataAdapter("SELECT * FROM upgrades", c);
+                DataTable table = new DataTable();
+                da.Fill(table);
+                int count = table.Rows.Count;
+                textBoxLog.AppendText("Choose an upgrade ");
+                textBoxUpgrades.Enabled = true;
+                buttonAtk1.Enabled = false;
+                buttonAtk2.Enabled = false;
+                buttonAtk3.Enabled = false;
+                buttonUpg.Enabled = true;
+                for (int i = 1; i <= count; i++)
+                {
+
+                    SqlCommand infoUpgrades = new SqlCommand(info, c);
+                    infoUpgrades.Parameters.AddWithValue("@id", i);
+                    using (SqlDataReader reader = infoUpgrades.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            string Name = reader["upgradeName"].ToString();
+                            string Value = reader["upgradeValue"].ToString();
+                            string Type = reader["upgradetype"].ToString();
+                            textBoxLog.AppendText("" + Name + " Value  " + Value + " upgradetype " + Type + ". ");
+                        }
+                    }
+                }
+            }
+
+        }
         private void EnemyTurn()
         {
             int dmg = enemyAtk - playerDef;
@@ -199,6 +240,7 @@ namespace Travail3BD
 
         private void EnemyDefeated()
         {
+            enemyHp = 0;
             textBoxLog.AppendText(enemyName + " est vaincu !\r\n");
 
             score++;
@@ -209,7 +251,7 @@ namespace Travail3BD
             playerHp += heal;
             if (playerHp > playerMaxHp) playerHp = playerMaxHp;
 
-            LoadEnemy();
+            
             UpdateUI();
         }
 
@@ -250,6 +292,23 @@ namespace Travail3BD
                 string type = abilityTable.Rows[2]["abilityType"].ToString();
                 PlayerAttack(power, 0, name, type);
             }
+        }
+
+        private void GameForm_Load_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void buttonUpg_Click(object sender, EventArgs e)
+        {
+            string conn = @"Server=localhost;Database=FurryRPG;Trusted_Connection=True;TrustServerCertificate=True";
+            textBoxUpgrades.Enabled = false;
+            buttonAtk1.Enabled = true;
+            buttonAtk2.Enabled = true;
+            buttonAtk3.Enabled = true;
+            buttonUpg.Enabled = false;
+            LoadEnemy();
+            UpdateUI();
         }
     }
 }

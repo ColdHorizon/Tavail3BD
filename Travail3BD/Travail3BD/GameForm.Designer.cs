@@ -26,6 +26,8 @@
             buttonAtk2 = new Button();
             buttonAtk3 = new Button();
             textBoxLog = new TextBox();
+            textBoxUpgrades = new TextBox();
+            buttonUpg = new Button();
             SuspendLayout();
             // 
             // labelPlayerHP
@@ -33,7 +35,7 @@
             labelPlayerHP.AutoSize = true;
             labelPlayerHP.Location = new Point(30, 30);
             labelPlayerHP.Name = "labelPlayerHP";
-            labelPlayerHP.Size = new Size(100, 20);
+            labelPlayerHP.Size = new Size(72, 20);
             labelPlayerHP.TabIndex = 0;
             labelPlayerHP.Text = "Player HP";
             // 
@@ -42,7 +44,7 @@
             labelPlayerEnergy.AutoSize = true;
             labelPlayerEnergy.Location = new Point(30, 60);
             labelPlayerEnergy.Name = "labelPlayerEnergy";
-            labelPlayerEnergy.Size = new Size(110, 20);
+            labelPlayerEnergy.Size = new Size(98, 20);
             labelPlayerEnergy.TabIndex = 1;
             labelPlayerEnergy.Text = "Player Energy";
             // 
@@ -51,7 +53,7 @@
             labelEnemyName.AutoSize = true;
             labelEnemyName.Location = new Point(400, 30);
             labelEnemyName.Name = "labelEnemyName";
-            labelEnemyName.Size = new Size(105, 20);
+            labelEnemyName.Size = new Size(97, 20);
             labelEnemyName.TabIndex = 2;
             labelEnemyName.Text = "Enemy Name";
             // 
@@ -60,7 +62,7 @@
             labelEnemyHP.AutoSize = true;
             labelEnemyHP.Location = new Point(400, 60);
             labelEnemyHP.Name = "labelEnemyHP";
-            labelEnemyHP.Size = new Size(85, 20);
+            labelEnemyHP.Size = new Size(76, 20);
             labelEnemyHP.TabIndex = 3;
             labelEnemyHP.Text = "Enemy HP";
             // 
@@ -69,13 +71,13 @@
             labelScore.AutoSize = true;
             labelScore.Location = new Point(30, 90);
             labelScore.Name = "labelScore";
-            labelScore.Size = new Size(49, 20);
+            labelScore.Size = new Size(46, 20);
             labelScore.TabIndex = 4;
             labelScore.Text = "Score";
             // 
             // buttonAtk1
             // 
-            buttonAtk1.Location = new Point(30, 150);
+            buttonAtk1.Location = new Point(30, 154);
             buttonAtk1.Name = "buttonAtk1";
             buttonAtk1.Size = new Size(150, 40);
             buttonAtk1.TabIndex = 5;
@@ -107,16 +109,35 @@
             // 
             textBoxLog.Location = new Point(220, 150);
             textBoxLog.Multiline = true;
-            textBoxLog.ScrollBars = ScrollBars.Vertical;
             textBoxLog.Name = "textBoxLog";
+            textBoxLog.ScrollBars = ScrollBars.Vertical;
             textBoxLog.Size = new Size(350, 250);
             textBoxLog.TabIndex = 8;
+            // 
+            // textBoxUpgrades
+            // 
+            textBoxUpgrades.Location = new Point(41, 341);
+            textBoxUpgrades.Name = "textBoxUpgrades";
+            textBoxUpgrades.Size = new Size(125, 27);
+            textBoxUpgrades.TabIndex = 9;
+            // 
+            // buttonUpg
+            // 
+            buttonUpg.Location = new Point(30, 374);
+            buttonUpg.Name = "buttonUpg";
+            buttonUpg.Size = new Size(150, 40);
+            buttonUpg.TabIndex = 10;
+            buttonUpg.Text = "Upgrade";
+            buttonUpg.UseVisualStyleBackColor = true;
+            buttonUpg.Click += buttonUpg_Click;
             // 
             // GameForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(600, 450);
+            Controls.Add(buttonUpg);
+            Controls.Add(textBoxUpgrades);
             Controls.Add(textBoxLog);
             Controls.Add(buttonAtk3);
             Controls.Add(buttonAtk2);
@@ -128,6 +149,7 @@
             Controls.Add(labelPlayerHP);
             Name = "GameForm";
             Text = "GameForm";
+            Load += GameForm_Load_1;
             ResumeLayout(false);
             PerformLayout();
         }
@@ -143,5 +165,7 @@
         private Button buttonAtk2;
         private Button buttonAtk3;
         private TextBox textBoxLog;
+        private TextBox textBoxUpgrades;
+        private Button buttonUpg;
     }
 }
