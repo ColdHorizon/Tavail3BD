@@ -302,13 +302,21 @@ namespace Travail3BD
         private void buttonUpg_Click(object sender, EventArgs e)
         {
             string conn = @"Server=localhost;Database=FurryRPG;Trusted_Connection=True;TrustServerCertificate=True";
-            textBoxUpgrades.Enabled = false;
-            buttonAtk1.Enabled = true;
-            buttonAtk2.Enabled = true;
-            buttonAtk3.Enabled = true;
-            buttonUpg.Enabled = false;
-            LoadEnemy();
-            UpdateUI();
+            if (textBoxUpgrades.Text.Trim() == "")
+            {
+                MessageBox.Show("Need to add a value in the upgrades");
+            }
+            else
+            {
+                textBoxUpgrades.Enabled = false;
+                buttonAtk1.Enabled = true;
+                buttonAtk2.Enabled = true;
+                buttonAtk3.Enabled = true;
+                buttonUpg.Enabled = false;
+                LoadEnemy();
+                UpdateUI();
+            }
+           
         }
     }
 }
