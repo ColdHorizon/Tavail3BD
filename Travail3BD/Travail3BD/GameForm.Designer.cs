@@ -1,4 +1,7 @@
-﻿namespace Travail3BD
+﻿using System.Drawing;
+using System.Windows.Forms;
+
+namespace Travail3BD
 {
     partial class GameForm
     {
@@ -12,8 +15,6 @@
             }
             base.Dispose(disposing);
         }
-
-        #region Windows Form Designer generated code
 
         private void InitializeComponent()
         {
@@ -29,54 +30,42 @@
             textBoxUpgrades = new TextBox();
             buttonUpg = new Button();
             SuspendLayout();
-            // 
-            // labelPlayerHP
-            // 
+
             labelPlayerHP.AutoSize = true;
             labelPlayerHP.Location = new Point(30, 30);
             labelPlayerHP.Name = "labelPlayerHP";
             labelPlayerHP.Size = new Size(72, 20);
             labelPlayerHP.TabIndex = 0;
             labelPlayerHP.Text = "Player HP";
-            // 
-            // labelPlayerEnergy
-            // 
+
             labelPlayerEnergy.AutoSize = true;
             labelPlayerEnergy.Location = new Point(30, 60);
             labelPlayerEnergy.Name = "labelPlayerEnergy";
             labelPlayerEnergy.Size = new Size(98, 20);
             labelPlayerEnergy.TabIndex = 1;
             labelPlayerEnergy.Text = "Player Energy";
-            // 
-            // labelEnemyName
-            // 
+
             labelEnemyName.AutoSize = true;
             labelEnemyName.Location = new Point(400, 30);
             labelEnemyName.Name = "labelEnemyName";
             labelEnemyName.Size = new Size(97, 20);
             labelEnemyName.TabIndex = 2;
             labelEnemyName.Text = "Enemy Name";
-            // 
-            // labelEnemyHP
-            // 
+
             labelEnemyHP.AutoSize = true;
             labelEnemyHP.Location = new Point(400, 60);
             labelEnemyHP.Name = "labelEnemyHP";
             labelEnemyHP.Size = new Size(76, 20);
             labelEnemyHP.TabIndex = 3;
             labelEnemyHP.Text = "Enemy HP";
-            // 
-            // labelScore
-            // 
+
             labelScore.AutoSize = true;
             labelScore.Location = new Point(30, 90);
             labelScore.Name = "labelScore";
             labelScore.Size = new Size(46, 20);
             labelScore.TabIndex = 4;
             labelScore.Text = "Score";
-            // 
-            // buttonAtk1
-            // 
+
             buttonAtk1.Location = new Point(30, 154);
             buttonAtk1.Name = "buttonAtk1";
             buttonAtk1.Size = new Size(150, 40);
@@ -84,9 +73,7 @@
             buttonAtk1.Text = "Attack 1";
             buttonAtk1.UseVisualStyleBackColor = true;
             buttonAtk1.Click += button1_Click;
-            // 
-            // buttonAtk2
-            // 
+
             buttonAtk2.Location = new Point(30, 200);
             buttonAtk2.Name = "buttonAtk2";
             buttonAtk2.Size = new Size(150, 40);
@@ -94,9 +81,7 @@
             buttonAtk2.Text = "Attack 2";
             buttonAtk2.UseVisualStyleBackColor = true;
             buttonAtk2.Click += button2_Click;
-            // 
-            // buttonAtk3
-            // 
+
             buttonAtk3.Location = new Point(30, 250);
             buttonAtk3.Name = "buttonAtk3";
             buttonAtk3.Size = new Size(150, 40);
@@ -104,25 +89,19 @@
             buttonAtk3.Text = "Attack 3";
             buttonAtk3.UseVisualStyleBackColor = true;
             buttonAtk3.Click += button3_Click;
-            // 
-            // textBoxLog
-            // 
+
             textBoxLog.Location = new Point(220, 150);
             textBoxLog.Multiline = true;
             textBoxLog.Name = "textBoxLog";
             textBoxLog.ScrollBars = ScrollBars.Vertical;
             textBoxLog.Size = new Size(350, 250);
             textBoxLog.TabIndex = 8;
-            // 
-            // textBoxUpgrades
-            // 
+
             textBoxUpgrades.Location = new Point(41, 341);
             textBoxUpgrades.Name = "textBoxUpgrades";
             textBoxUpgrades.Size = new Size(125, 27);
             textBoxUpgrades.TabIndex = 9;
-            // 
-            // buttonUpg
-            // 
+
             buttonUpg.Location = new Point(30, 374);
             buttonUpg.Name = "buttonUpg";
             buttonUpg.Size = new Size(150, 40);
@@ -130,9 +109,7 @@
             buttonUpg.Text = "Upgrade";
             buttonUpg.UseVisualStyleBackColor = true;
             buttonUpg.Click += buttonUpg_Click;
-            // 
-            // GameForm
-            // 
+
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(600, 450);
@@ -149,12 +126,9 @@
             Controls.Add(labelPlayerHP);
             Name = "GameForm";
             Text = "GameForm";
-            Load += GameForm_Load_1;
             ResumeLayout(false);
             PerformLayout();
         }
-
-        #endregion
 
         private Label labelPlayerHP;
         private Label labelPlayerEnergy;
