@@ -1,9 +1,7 @@
 ﻿using Microsoft.Data.SqlClient;
 using System;
-using System.ComponentModel;
 using System.Data;
 using System.Media;
-using System.Numerics;
 using System.Windows.Forms;
 
 namespace Travail3BD
@@ -23,13 +21,20 @@ namespace Travail3BD
         int enemyId;
         string enemyName;
         int enemyHp;
+        int enemyMaxHp;
         int enemyAtk;
         int enemyDef;
+
+        int enemyAbilityPower;
+        string enemyAbilityType;
 
         int projectionCharges = 0;
         bool upgradePending = false;
 
         int focusBonus = 0;
+
+        bool enemySkipTurn = false;
+        bool enemyBackstabbed = false;
 
         Random rng = new Random();
         DataTable abilityTable = new DataTable();
@@ -37,8 +42,16 @@ namespace Travail3BD
         public GameForm(int id)
         {
             InitializeComponent();
-            combat.SoundLocation = @"4-01. TOTSUGEKI.wav";
-            combat.PlayLooping();
+
+            try
+            {
+                combat.SoundLocation = @"4-01. TOTSUGEKI.wav";
+                combat.PlayLooping();
+            }
+            catch
+            {
+            }
+
             playerId = id;
             this.Load += GameForm_Load;
 
@@ -87,6 +100,8 @@ namespace Travail3BD
 
         private void LoadPlayerAbilities()
         {
+            abilityTable = new DataTable();
+
             string conn = @"Server=localhost;Database=FurryRPG;Trusted_Connection=True;TrustServerCertificate=True";
 
             using (SqlConnection c = new SqlConnection(conn))
@@ -120,6 +135,10 @@ namespace Travail3BD
 
         private void LoadEnemy()
         {
+            enemySkipTurn = false;
+            enemyBackstabbed = false;
+            projectionCharges = 0;
+
             string conn = @"Server=localhost;Database=FurryRPG;Trusted_Connection=True;TrustServerCertificate=True";
 
             using (SqlConnection c = new SqlConnection(conn))
@@ -142,6 +161,28 @@ namespace Travail3BD
                 enemyHp = (int)(enemyHp * scale);
                 enemyAtk = (int)(enemyAtk * scale);
                 enemyDef = (int)(enemyDef * scale);
+
+                enemyMaxHp = enemyHp;
+
+                SqlDataAdapter da2 = new SqlDataAdapter(
+                    "SELECT a.abilityPower, a.abilityType " +
+                    "FROM enemy_abilities ea " +
+                    "JOIN abilities a ON ea.abilityId = a.abilityId " +
+                    "WHERE ea.enemyId = @id", c);
+                da2.SelectCommand.Parameters.AddWithValue("@id", enemyId);
+                DataTable ab = new DataTable();
+                da2.Fill(ab);
+
+                if (ab.Rows.Count > 0)
+                {
+                    enemyAbilityPower = (int)ab.Rows[0]["abilityPower"];
+                    enemyAbilityType = ab.Rows[0]["abilityType"].ToString();
+                }
+                else
+                {
+                    enemyAbilityPower = 0;
+                    enemyAbilityType = "basic";
+                }
             }
         }
 
@@ -161,7 +202,7 @@ namespace Travail3BD
                 buttonAtk3.Text = abilityTable.Rows[2]["abilityName"].ToString();
         }
 
-        private void PlayerAttack(int power, int cost, string abilityName, string abilityType)
+        private void PlayerAttack(int power, string abilityName, string abilityType)
         {
             if (abilityType == "focus")
             {
@@ -175,28 +216,37 @@ namespace Travail3BD
                 return;
             }
 
+            int cost = 0;
+
+            if (abilityType == "basic")
+                cost = 0;
+            else if (abilityType == "barrage" || abilityType == "backstab" || abilityType == "rewind")
+                cost = 2;
+            else
+                cost = 1;
+
+            if (playerEnergy < cost)
+            {
+                textBoxLog.AppendText("Pas assez d'énergie.\r\n");
+                return;
+            }
+
+            playerEnergy -= cost;
+
             if (abilityType == "basic")
             {
                 power = playerAtk * 2;
             }
 
-            if (abilityType != "basic" && abilityType != "focus")
-                cost = 1;
-            else
-                cost = 0;
-
-            if (playerEnergy < cost)
-                return;
-
-            playerEnergy -= cost;
-
-            if (abilityType.StartsWith("chance-hit"))
+            if (abilityType == "rewind")
             {
-                int roll = rng.Next(100);
-                if (roll < 10)
-                    power *= 3;
-                else if (roll < 25)
-                    power *= 2;
+                int heal = (int)(playerMaxHp * 0.25);
+                playerHp += heal;
+                if (playerHp > playerMaxHp) playerHp = playerMaxHp;
+                textBoxLog.AppendText("Tu utilises Rewind et récupères " + heal + " HP.\r\n");
+                EnemyTurn();
+                UpdateUI();
+                return;
             }
 
             if (abilityType == "projection")
@@ -215,12 +265,104 @@ namespace Travail3BD
                 }
             }
 
-            int dmg = power + playerAtk - enemyDef;
-            if (dmg < 0) dmg = 0;
+            if (abilityType == "barrage")
+            {
+                int hits = 0;
+                int chance = 100;
+                int totalDmg = 0;
 
-            enemyHp -= dmg;
+                while (true)
+                {
+                    int roll = rng.Next(100);
+                    if (roll >= chance)
+                        break;
 
-            textBoxLog.AppendText("Tu utilises " + abilityName + " et infliges " + dmg + " dégâts.\r\n");
+                    hits++;
+                    int hitDmg = power + playerAtk - enemyDef;
+                    if (hitDmg < 0) hitDmg = 0;
+                    totalDmg += hitDmg;
+                    chance -= 5;
+                }
+
+                enemyHp -= totalDmg;
+                textBoxLog.AppendText("Tu utilises Barrage et touches " + hits + " fois pour " + totalDmg + " dégâts.\r\n");
+
+                if (enemyHp <= 0)
+                {
+                    EnemyDefeated();
+                    Upgrade();
+                    return;
+                }
+
+                EnemyTurn();
+                UpdateUI();
+                return;
+            }
+
+            if (abilityType == "double-or-nothing")
+            {
+                int baseDmg = power + playerAtk - enemyDef;
+                if (baseDmg < 0) baseDmg = 0;
+
+                int roll = rng.Next(100);
+                int dmg = 0;
+
+                if (roll < 50)
+                {
+                    dmg = baseDmg * 2;
+                    textBoxLog.AppendText("Double or Nothing réussit !\r\n");
+                }
+                else
+                {
+                    dmg = 0;
+                    textBoxLog.AppendText("Double or Nothing échoue... 0 dégâts.\r\n");
+                }
+
+                enemyHp -= dmg;
+                textBoxLog.AppendText("Tu utilises " + abilityName + " et infliges " + dmg + " dégâts.\r\n");
+
+                if (enemyHp <= 0)
+                {
+                    EnemyDefeated();
+                    Upgrade();
+                    return;
+                }
+
+                EnemyTurn();
+                UpdateUI();
+                return;
+            }
+
+            if (abilityType.StartsWith("chance-hit"))
+            {
+                int roll = rng.Next(100);
+                if (roll < 10)
+                    power *= 3;
+                else if (roll < 25)
+                    power *= 2;
+            }
+
+            int finalDmg = power + playerAtk - enemyDef;
+            if (finalDmg < 0) finalDmg = 0;
+
+            enemyHp -= finalDmg;
+            textBoxLog.AppendText("Tu utilises " + abilityName + " et infliges " + finalDmg + " dégâts.\r\n");
+
+            if (abilityType == "quick-jab")
+            {
+                int roll = rng.Next(100);
+                if (roll < 40)
+                {
+                    enemySkipTurn = true;
+                    textBoxLog.AppendText("Quick Jab réussit ! L'ennemi va sauter son prochain tour.\r\n");
+                }
+            }
+
+            if (abilityType == "backstab")
+            {
+                enemyBackstabbed = true;
+                textBoxLog.AppendText("Backstab appliqué ! L'ennemi perdra 25% de ses HP max à chaque attaque.\r\n");
+            }
 
             if (enemyHp <= 0)
             {
@@ -270,11 +412,55 @@ namespace Travail3BD
 
         private void EnemyTurn()
         {
-            float reduction = playerDef / 100f;
-            if (reduction > 0.90f) reduction = 0.90f;
+            if (enemyHp <= 0)
+                return;
 
-            int dmg = (int)Math.Floor(enemyAtk * (1 - reduction));
-            if (dmg < 1) dmg = 1;
+            if (enemySkipTurn)
+            {
+                textBoxLog.AppendText(enemyName + " est étourdi et saute son tour.\r\n");
+                enemySkipTurn = false;
+                return;
+            }
+
+            if (enemyBackstabbed)
+            {
+                int dot = (int)(enemyMaxHp * 0.25);
+                enemyHp -= dot;
+                textBoxLog.AppendText(enemyName + " subit " + dot + " dégâts de Backstab.\r\n");
+
+                if (enemyHp <= 0)
+                {
+                    EnemyDefeated();
+                    Upgrade();
+                    return;
+                }
+            }
+
+            if (enemyAbilityType == "miss25")
+            {
+                int roll = rng.Next(100);
+                if (roll < 25)
+                {
+                    textBoxLog.AppendText(enemyName + " rate son attaque !\r\n");
+                    return;
+                }
+            }
+
+            int dmg;
+
+            if (enemyAbilityType == "basic")
+            {
+                dmg = enemyAtk + enemyAbilityPower - playerDef;
+                if (dmg < 1) dmg = 1;
+            }
+            else
+            {
+                float reduction = playerDef / 100f;
+                if (reduction > 0.90f) reduction = 0.90f;
+
+                dmg = (int)Math.Floor(enemyAtk * (1 - reduction));
+                if (dmg < 1) dmg = 1;
+            }
 
             playerHp -= dmg;
 
@@ -312,7 +498,7 @@ namespace Travail3BD
             string name = abilityTable.Rows[0]["abilityName"].ToString();
             int power = (int)abilityTable.Rows[0]["abilityPower"];
             string type = abilityTable.Rows[0]["abilityType"].ToString();
-            PlayerAttack(power, 0, name, type);
+            PlayerAttack(power, name, type);
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -320,7 +506,7 @@ namespace Travail3BD
             string name = abilityTable.Rows[1]["abilityName"].ToString();
             int power = (int)abilityTable.Rows[1]["abilityPower"];
             string type = abilityTable.Rows[1]["abilityType"].ToString();
-            PlayerAttack(power, 1, name, type);
+            PlayerAttack(power, name, type);
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -328,7 +514,7 @@ namespace Travail3BD
             string name = abilityTable.Rows[2]["abilityName"].ToString();
             int power = (int)abilityTable.Rows[2]["abilityPower"];
             string type = abilityTable.Rows[2]["abilityType"].ToString();
-            PlayerAttack(power, 0, name, type);
+            PlayerAttack(power, name, type);
         }
 
         private void buttonUpg_Click(object sender, EventArgs e)
@@ -344,12 +530,12 @@ namespace Travail3BD
             }
             else if (choice == 2)
             {
-                playerAtk += 1;
+                playerAtk += 2;
                 textBoxLog.AppendText("ATK increased.\r\n");
             }
             else if (choice == 3)
             {
-                playerDef += 1;
+                playerDef += 2;
                 textBoxLog.AppendText("DEF increased.\r\n");
             }
             else if (choice == 4)

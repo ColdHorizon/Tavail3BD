@@ -26,6 +26,7 @@ namespace Travail3BD
             buttonAtk1 = new Button();
             buttonAtk2 = new Button();
             buttonAtk3 = new Button();
+            buttonAtk4 = new Button();
             textBoxLog = new TextBox();
             textBoxUpgrades = new TextBox();
             buttonUpg = new Button();
@@ -106,6 +107,16 @@ namespace Travail3BD
             buttonAtk3.UseVisualStyleBackColor = true;
             buttonAtk3.Click += button3_Click;
             // 
+            // buttonAtk4
+            // 
+            buttonAtk4.Location = new Point(30, 300);
+            buttonAtk4.Name = "buttonAtk4";
+            buttonAtk4.Size = new Size(150, 40);
+            buttonAtk4.TabIndex = 11;
+            buttonAtk4.Text = "Attack 4";
+            buttonAtk4.UseVisualStyleBackColor = true;
+            buttonAtk4.Click += button4_Click;
+            // 
             // textBoxLog
             // 
             textBoxLog.Location = new Point(220, 150);
@@ -117,14 +128,14 @@ namespace Travail3BD
             // 
             // textBoxUpgrades
             // 
-            textBoxUpgrades.Location = new Point(41, 341);
+            textBoxUpgrades.Location = new Point(41, 360);
             textBoxUpgrades.Name = "textBoxUpgrades";
             textBoxUpgrades.Size = new Size(125, 27);
             textBoxUpgrades.TabIndex = 9;
             // 
             // buttonUpg
             // 
-            buttonUpg.Location = new Point(30, 374);
+            buttonUpg.Location = new Point(30, 395);
             buttonUpg.Name = "buttonUpg";
             buttonUpg.Size = new Size(150, 40);
             buttonUpg.TabIndex = 10;
@@ -138,6 +149,7 @@ namespace Travail3BD
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.LightSkyBlue;
             ClientSize = new Size(600, 450);
+            Controls.Add(buttonAtk4);
             Controls.Add(buttonUpg);
             Controls.Add(textBoxUpgrades);
             Controls.Add(textBoxLog);
@@ -163,6 +175,7 @@ namespace Travail3BD
         private Button buttonAtk1;
         private Button buttonAtk2;
         private Button buttonAtk3;
+        private Button buttonAtk4;
         private TextBox textBoxLog;
         private TextBox textBoxUpgrades;
         private Button buttonUpg;
