@@ -45,7 +45,6 @@
             textBoxName.Name = "textBoxName";
             textBoxName.Size = new Size(125, 27);
             textBoxName.TabIndex = 0;
-            //textBoxName.TextChanged += textBoxName_TextChanged;
             // 
             // comboBoxClass
             // 
@@ -101,7 +100,6 @@
             dataGridView1.RowHeadersWidth = 51;
             dataGridView1.Size = new Size(555, 188);
             dataGridView1.TabIndex = 12;
-            //dataGridView1.CellContentClick += dataGridView1_CellContentClick;
             // 
             // label3
             // 
@@ -116,6 +114,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
+            BackColor = SystemColors.ActiveCaption;
             ClientSize = new Size(800, 450);
             Controls.Add(label3);
             Controls.Add(dataGridView1);
