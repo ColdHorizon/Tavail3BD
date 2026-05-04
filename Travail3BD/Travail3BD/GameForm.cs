@@ -1,12 +1,16 @@
 ﻿using Microsoft.Data.SqlClient;
 using System;
+using System.ComponentModel;
 using System.Data;
+using System.Media;
+using System.Numerics;
 using System.Windows.Forms;
 
 namespace Travail3BD
 {
     public partial class GameForm : Form
     {
+        SoundPlayer combat = new SoundPlayer();
         int playerId = 1;
 
         int playerMaxHp;
@@ -33,6 +37,8 @@ namespace Travail3BD
         public GameForm(int id)
         {
             InitializeComponent();
+            combat.SoundLocation = @"4-01. TOTSUGEKI.wav";
+            combat.PlayLooping();
             playerId = id;
             this.Load += GameForm_Load;
 
@@ -296,6 +302,7 @@ namespace Travail3BD
 
         private void GameOver()
         {
+            combat.Stop();
             MessageBox.Show("Game Over ! Score final : " + score);
             this.Close();
         }
