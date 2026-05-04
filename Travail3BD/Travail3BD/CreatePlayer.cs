@@ -14,6 +14,7 @@ namespace Travail3BD
 
         private void CreatePlayer_Load(object sender, EventArgs e)
         {
+            // Charge la liste des classes dans la ComboBox
             string conn = @"Server=localhost;Database=FurryRPG;Trusted_Connection=True;TrustServerCertificate=True";
 
             using (SqlConnection c = new SqlConnection(conn))
@@ -27,6 +28,7 @@ namespace Travail3BD
             }
         }
 
+        // Affiche les stats de la classe sélectionnée
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             string conn = @"Server=localhost;Database=FurryRPG;Trusted_Connection=True;TrustServerCertificate=True";
@@ -45,10 +47,12 @@ namespace Travail3BD
                 DataTable dt = new DataTable();
                 da.Fill(dt);
 
+                // Affiche les stats dans le DataGridView
                 dataGridView1.DataSource = dt;
             }
         }
 
+        // Bouton : créer un nouveau joueur
         private void button1_Click(object sender, EventArgs e)
         {
             string name = textBoxName.Text.Trim();
@@ -66,7 +70,7 @@ namespace Travail3BD
             {
                 c.Open();
 
-                // Get class stats
+                // Récupère les stats de la classe choisie
                 SqlCommand getClass = new SqlCommand(
                     "SELECT hpBase, atkBase, defBase, classId FROM classes WHERE className = @c",
                     c
@@ -83,9 +87,11 @@ namespace Travail3BD
 
                 r.Close();
 
+                // Génère un ID aléatoire pour le joueur
                 Random rng = new Random();
                 int newId = rng.Next(1, 9999);
 
+                // Insère le joueur dans la base de données
                 SqlCommand insert = new SqlCommand(
                     "INSERT INTO players (playerId, playerName, hp, atk, def, classId) VALUES (@id, @name, @hp, @atk, @def, @classId)",
                     c
