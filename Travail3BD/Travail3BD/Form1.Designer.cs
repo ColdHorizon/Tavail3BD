@@ -78,6 +78,7 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Microsoft JhengHei", 22.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label1.ForeColor = SystemColors.HighlightText;
             label1.Location = new Point(339, 73);
             label1.Name = "label1";
             label1.Size = new Size(409, 47);
@@ -89,7 +90,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = SystemColors.Info;
+            BackColor = Color.DodgerBlue;
             ClientSize = new Size(800, 450);
             Controls.Add(label1);
             Controls.Add(buttonUsePly);
