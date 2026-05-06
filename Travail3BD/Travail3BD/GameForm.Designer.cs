@@ -18,6 +18,7 @@ namespace Travail3BD
 
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(GameForm));
             labelPlayerHP = new Label();
             labelPlayerEnergy = new Label();
             labelEnemyName = new Label();
@@ -30,6 +31,10 @@ namespace Travail3BD
             textBoxLog = new TextBox();
             textBoxUpgrades = new TextBox();
             buttonUpg = new Button();
+            pictureBox1 = new PictureBox();
+            pictureBox2 = new PictureBox();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox2).BeginInit();
             SuspendLayout();
             // 
             // labelPlayerHP
@@ -53,7 +58,7 @@ namespace Travail3BD
             // labelEnemyName
             // 
             labelEnemyName.AutoSize = true;
-            labelEnemyName.Location = new Point(400, 30);
+            labelEnemyName.Location = new Point(319, 30);
             labelEnemyName.Name = "labelEnemyName";
             labelEnemyName.Size = new Size(97, 20);
             labelEnemyName.TabIndex = 2;
@@ -62,7 +67,7 @@ namespace Travail3BD
             // labelEnemyHP
             // 
             labelEnemyHP.AutoSize = true;
-            labelEnemyHP.Location = new Point(400, 60);
+            labelEnemyHP.Location = new Point(329, 60);
             labelEnemyHP.Name = "labelEnemyHP";
             labelEnemyHP.Size = new Size(76, 20);
             labelEnemyHP.TabIndex = 3;
@@ -143,12 +148,34 @@ namespace Travail3BD
             buttonUpg.UseVisualStyleBackColor = true;
             buttonUpg.Click += buttonUpg_Click;
             // 
+            // pictureBox1
+            // 
+            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
+            pictureBox1.Location = new Point(149, 12);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(116, 114);
+            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBox1.TabIndex = 12;
+            pictureBox1.TabStop = false;
+            // 
+            // pictureBox2
+            // 
+            pictureBox2.Image = (Image)resources.GetObject("pictureBox2.Image");
+            pictureBox2.Location = new Point(462, 12);
+            pictureBox2.Name = "pictureBox2";
+            pictureBox2.Size = new Size(116, 114);
+            pictureBox2.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBox2.TabIndex = 13;
+            pictureBox2.TabStop = false;
+            // 
             // GameForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.LightSkyBlue;
             ClientSize = new Size(600, 450);
+            Controls.Add(pictureBox2);
+            Controls.Add(pictureBox1);
             Controls.Add(buttonAtk4);
             Controls.Add(buttonUpg);
             Controls.Add(textBoxUpgrades);
@@ -163,6 +190,8 @@ namespace Travail3BD
             Controls.Add(labelPlayerHP);
             Name = "GameForm";
             Text = "GameForm";
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -179,5 +208,7 @@ namespace Travail3BD
         private TextBox textBoxLog;
         private TextBox textBoxUpgrades;
         private Button buttonUpg;
+        private PictureBox pictureBox1;
+        private PictureBox pictureBox2;
     }
 }

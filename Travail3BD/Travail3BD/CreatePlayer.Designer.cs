@@ -49,7 +49,7 @@
             // comboBoxClass
             // 
             comboBoxClass.FormattingEnabled = true;
-            comboBoxClass.Location = new Point(455, 158);
+            comboBoxClass.Location = new Point(435, 158);
             comboBoxClass.Name = "comboBoxClass";
             comboBoxClass.Size = new Size(151, 28);
             comboBoxClass.TabIndex = 1;
@@ -58,33 +58,36 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(344, 27);
+            label1.Font = new Font("Segoe UI Symbol", 22.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1.Location = new Point(233, 9);
             label1.Name = "label1";
-            label1.Size = new Size(119, 20);
+            label1.Size = new Size(311, 50);
             label1.TabIndex = 2;
             label1.Text = "Create Character";
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(59, 77);
+            label2.Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label2.Location = new Point(66, 116);
             label2.Name = "label2";
-            label2.Size = new Size(46, 20);
+            label2.Size = new Size(56, 25);
             label2.TabIndex = 3;
             label2.Text = "name";
             // 
             // label9
             // 
             label9.AutoSize = true;
-            label9.Location = new Point(508, 93);
+            label9.Font = new Font("Segoe UI", 10.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label9.Location = new Point(492, 116);
             label9.Name = "label9";
-            label9.Size = new Size(42, 20);
+            label9.Size = new Size(52, 25);
             label9.TabIndex = 10;
             label9.Text = "Class";
             // 
             // buttonCrt
             // 
-            buttonCrt.Location = new Point(12, 376);
+            buttonCrt.Location = new Point(12, 250);
             buttonCrt.Name = "buttonCrt";
             buttonCrt.Size = new Size(166, 29);
             buttonCrt.TabIndex = 11;
@@ -104,7 +107,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(500, 213);
+            label3.Location = new Point(494, 211);
             label3.Name = "label3";
             label3.Size = new Size(50, 20);
             label3.TabIndex = 13;
@@ -114,7 +117,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = SystemColors.ActiveCaption;
+            BackColor = Color.DodgerBlue;
             ClientSize = new Size(800, 450);
             Controls.Add(label3);
             Controls.Add(dataGridView1);

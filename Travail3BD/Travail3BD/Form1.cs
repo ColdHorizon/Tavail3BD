@@ -78,5 +78,10 @@ namespace Travail3BD
         {
             // Non utilisé
         }
+
+        private void pictureBox1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

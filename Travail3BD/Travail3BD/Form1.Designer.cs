@@ -28,19 +28,24 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             label2 = new Label();
             buttonNew = new Button();
             comboBoxPly = new ComboBox();
             buttonUsePly = new Button();
             label1 = new Label();
+            pictureBox1 = new PictureBox();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(89, 73);
+            label2.Font = new Font("Segoe UI", 13.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label2.ForeColor = SystemColors.ControlLightLight;
+            label2.Location = new Point(71, 140);
             label2.Name = "label2";
-            label2.Size = new Size(106, 20);
+            label2.Size = new Size(162, 31);
             label2.TabIndex = 2;
             label2.Text = "Select a player";
             label2.Click += label2_Click;
@@ -57,8 +62,9 @@
             // 
             // comboBoxPly
             // 
+            comboBoxPly.FlatStyle = FlatStyle.Popup;
             comboBoxPly.FormattingEnabled = true;
-            comboBoxPly.Location = new Point(71, 210);
+            comboBoxPly.Location = new Point(71, 226);
             comboBoxPly.Name = "comboBoxPly";
             comboBoxPly.Size = new Size(151, 28);
             comboBoxPly.TabIndex = 5;
@@ -79,27 +85,40 @@
             label1.AutoSize = true;
             label1.Font = new Font("Microsoft JhengHei", 22.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label1.ForeColor = SystemColors.HighlightText;
-            label1.Location = new Point(339, 73);
+            label1.Location = new Point(334, 124);
             label1.Name = "label1";
-            label1.Size = new Size(409, 47);
+            label1.Size = new Size(406, 47);
             label1.TabIndex = 7;
-            label1.Text = "Welcome to Furry RPG";
+            label1.Text = "Welcome to Redimere";
             label1.Click += label1_Click;
+            // 
+            // pictureBox1
+            // 
+            pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
+            pictureBox1.Location = new Point(553, 200);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(224, 226);
+            pictureBox1.SizeMode = PictureBoxSizeMode.Zoom;
+            pictureBox1.TabIndex = 8;
+            pictureBox1.TabStop = false;
+            pictureBox1.Click += pictureBox1_Click;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            BackColor = Color.DodgerBlue;
+            BackColor = Color.FromArgb(0, 0, 192);
             ClientSize = new Size(800, 450);
+            Controls.Add(pictureBox1);
             Controls.Add(label1);
             Controls.Add(buttonUsePly);
             Controls.Add(comboBoxPly);
             Controls.Add(buttonNew);
             Controls.Add(label2);
             Name = "Form1";
-            Text = "Form1";
+            Text = "Redimere";
             Load += Form1_Load;
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -110,5 +129,6 @@
         private ComboBox comboBoxPly;
         private Button buttonUsePly;
         private Label label1;
+        private PictureBox pictureBox1;
     }
 }
